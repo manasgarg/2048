@@ -9,6 +9,7 @@ function HTMLActuator() {
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
   var self = this;
+  this.tableNumber = metadata.tableNumber || 2;
 
   window.requestAnimationFrame(function () {
     self.clearContainer(self.tileContainer);
@@ -55,14 +56,15 @@ HTMLActuator.prototype.addTile = function (tile) {
   var positionClass = this.positionClass(position);
 
   // We can't use classlist because it somehow glitches when replacing classes
-  var classes = ["tile", "tile-" + tile.value, positionClass];
+  var classes = ["tile", "tile-" + 2*(tile.value/self.tableNumber), positionClass];
 
   if (tile.value > 2048) classes.push("tile-super");
 
   this.applyClasses(wrapper, classes);
 
   inner.classList.add("tile-inner");
-  inner.textContent = tile.value;
+  //inner.textContent = tile.value;
+  inner.innerHTML = "<span class='value' style='display:block; font-size:45px; line-height:75px'>" + tile.value + "</span><span class='factor' style='display:block; font-size:27px; line-height:27px;'>(x " + (tile.value/self.tableNumber) + ")</span>";
 
   if (tile.previousPosition) {
     // Make sure that the tile gets rendered in the previous position first
